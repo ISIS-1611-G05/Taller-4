@@ -108,8 +108,37 @@ def select_unassigned_variable(csp, assignment, domains):
       original para los desempates.
     """
     # TODO: Add your code here
-    raise NotImplementedError
-    # FIN DEL BLOQUE DEL ESTUDIANTE
+    pendientes = [x for x in csp.variables if x not in assignment]
+
+    if not pendientes:
+        return None
+
+    mejor = None
+    mejor_cantidad = None
+    mejor_grado = None
+
+    for x in pendientes:
+        compatibles = [
+            v for v in domains[x]
+            if csp.consistent(x, v, assignment)
+        ]
+
+        cantidad = len(compatibles)
+
+        grado = sum(
+            1 for vecino in csp.neighbors[x]
+            if vecino not in assignment
+        )
+
+        if (mejor is None or
+            cantidad < mejor_cantidad or
+            (cantidad == mejor_cantidad and grado > mejor_grado)):
+
+            mejor = x
+            mejor_cantidad = cantidad
+            mejor_grado = grado
+
+    return mejor
 
 
 def order_domain_values(csp, variable, assignment, domains):
@@ -126,5 +155,36 @@ def order_domain_values(csp, variable, assignment, domains):
       sin modificar los dominios.
     """
     # TODO: Add your code here
-    raise NotImplementedError
-    # FIN DEL BLOQUE DEL ESTUDIANTE
+    
+    candidatos = [
+        v for v in domains[variable]
+        if csp.consistent(variable, v, assignment)
+    ]
+
+    pendientes = [
+        x for x in csp.neighbors[variable]
+        if x not in assignment
+    ]
+
+    puntuados = []
+
+    for valor in candidatos:
+        descartes = 0
+
+        for vecino in pendientes:
+
+            valores_vecino = [
+                otro for otro in domains[vecino]
+                if csp.consistent(vecino, otro, assignment)
+            ]
+
+            for otro in valores_vecino:
+                if not csp.compatible(variable, valor, vecino, otro):
+                    descartes += 1
+
+        puntuados.append((valor, descartes))
+
+    puntuados.sort(key=lambda par: par[1])
+  
+    return [valor for valor, descartes in puntuados]
+
