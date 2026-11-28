@@ -35,6 +35,8 @@ def build_rules():
     # TODO: Add your code here
     
     r1 = Rule(
+        'R1',
+        'Un tecnico es competente para una tarea',
         (
             atom('Asignado', '?t', '?p'),
             atom('Requiere', '?t', '?e'),
@@ -44,6 +46,8 @@ def build_rules():
     )
 
     r2 = Rule(
+        'R2',
+        'Una tarea esta preparada',
         (
             atom('EnZona', '?t', '?z'),
             atom('AislamientoConfirmado', '?z', '?f'),
@@ -53,6 +57,8 @@ def build_rules():
     )
 
     r3 = Rule(
+        'R3',
+        'Una tarea se autoriza',
         (
             atom('Programada', '?t', '?f'),
             atom('Asignado', '?t', '?p'),
@@ -64,6 +70,8 @@ def build_rules():
     )
 
     r4 = Rule(
+        'R4',
+        'Una tarea se bloquea por una alerta',
         (
             atom('Programada', '?t', '?f'),
             atom('EnZona', '?t', '?z'),
@@ -73,6 +81,8 @@ def build_rules():
     )
 
     r5 = Rule(
+        'R5',
+        'Una tarea se bloquea por fallo de aislamiento',
         (
             atom('Programada', '?t', '?f'),
             atom('EnZona', '?t', '?z'),
